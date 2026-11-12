@@ -2,10 +2,10 @@ package com.lewis.spring_boot_practice.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Service;
+import lombok.Setter;
 
 @Getter
-@Service
+@Setter
 @NoArgsConstructor
 public class UpdateTodoRequest {
     private String title;
