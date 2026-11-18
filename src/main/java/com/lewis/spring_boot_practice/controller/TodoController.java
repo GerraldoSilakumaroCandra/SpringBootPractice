@@ -1,11 +1,15 @@
 package com.lewis.spring_boot_practice.controller;
 
 import com.lewis.spring_boot_practice.dto.CreateTodoRequest;
+import com.lewis.spring_boot_practice.dto.TodoPageResponse;
 import com.lewis.spring_boot_practice.dto.TodoResponse;
 import com.lewis.spring_boot_practice.dto.UpdateTodoRequest;
 import com.lewis.spring_boot_practice.entity.Todo;
 import com.lewis.spring_boot_practice.service.TodoService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,14 +36,19 @@ public class TodoController {
     }
 
     @GetMapping
-    public List<TodoResponse> readTodos() {
-        return todoService.getTodos().stream()
+    public TodoPageResponse readTodos(@RequestParam(required = false) Boolean completed, Pageable pageable) {
+        Page<TodoResponse> result = todoService.getTodos(completed, pageable)
                 .map(todo -> new TodoResponse(
                         todo.getId(),
                         todo.getTitle(),
                         todo.isCompleted()
-                ))
-                .toList();
+                ));
+        return new TodoPageResponse(
+                result.getContent(),
+                result.getNumber(),
+                result.getSize(),
+                result.getTotalPages()
+        );
     }
 
     @PutMapping("/{id}")
