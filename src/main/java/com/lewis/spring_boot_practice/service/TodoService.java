@@ -3,6 +3,9 @@ package com.lewis.spring_boot_practice.service;
 import com.lewis.spring_boot_practice.dto.UpdateTodoRequest;
 import com.lewis.spring_boot_practice.entity.Todo;
 import com.lewis.spring_boot_practice.repository.TodoRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -24,8 +27,10 @@ public class TodoService {
         return todoRepository.save(todo);
     }
 
-    public List<Todo> getTodos() {
-        return todoRepository.findAll();
+    public Page<Todo> getTodos(Boolean completed, Pageable pageable) {
+        return completed != null
+                ? todoRepository.findByCompleted(completed, pageable)
+                : todoRepository.findAll(pageable);
     }
 
     public Todo updateTodo(Long id, UpdateTodoRequest request) {
