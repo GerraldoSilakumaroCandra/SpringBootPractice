@@ -5,6 +5,7 @@ import com.lewis.spring_boot_practice.dto.TodoResponse;
 import com.lewis.spring_boot_practice.dto.UpdateTodoRequest;
 import com.lewis.spring_boot_practice.entity.Todo;
 import com.lewis.spring_boot_practice.service.TodoService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class TodoController {
     }
 
     @PostMapping
-    public TodoResponse createTodo(@RequestBody CreateTodoRequest request) {
+    public TodoResponse createTodo(@Valid @RequestBody CreateTodoRequest request) {
         Todo todo =  todoService.createTodo(request.getTitle());
 
         return new TodoResponse(
@@ -42,7 +43,7 @@ public class TodoController {
     }
 
     @PutMapping("/{id}")
-    public TodoResponse updateTodo(@PathVariable Long id, @RequestBody UpdateTodoRequest request) {
+    public TodoResponse updateTodo(@PathVariable Long id, @Valid @RequestBody UpdateTodoRequest request) {
         Todo todo =  todoService.updateTodo(id, request);
 
         return new TodoResponse(
